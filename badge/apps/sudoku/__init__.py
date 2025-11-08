@@ -1,82 +1,96 @@
-# Sudoku Game Implementation
+from badgeware import screen, io, brushes, shapes, PixelFont, State
+import urandom
 
-class SudokuGame:
-    def __init__(self):
-        # Initialize game parameters
-        self.grid = self.generate_sudoku()
-        self.high_scores = self.load_high_scores()
-        self.current_score = 0
-        self.timer = 0
-        self.state = 'title'  # Could be 'title', 'play', 'pause', 'gameover'
-        self.difficulty = 'easy'  # Default difficulty
+# GitHub dark color palette
+COL_BG = (40, 40, 40)
+COL_GRID = (70, 70, 70)
+COL_TEXT = (255, 255, 255)
+COL_DIM = (120, 120, 120)
 
-    def generate_sudoku(self):
-        # Generate a Sudoku grid
-        pass  # Implement Sudoku generation logic
+# Safe RNG functions
+def _getrandbits(n):
+    return urandom.getrandbits(n)
 
-    def validate_sudoku(self):
-        # Validate the current Sudoku grid
-        pass  # Implement validation logic
+def _randint(low, high):
+    return (urandom.getrandbits(32) % (high - low + 1)) + low
 
-    def load_high_scores(self):
-        # Load high scores from persistent storage
-        return {'easy': 0, 'medium': 0, 'hard': 0}
+# Game state
+game_state = {
+    'screen': 'title',
+    'cursor_pos': (0, 0),
+    'board': [],
+    'solution': [],
+    'given_cells': [],
+    'mistakes': 0,
+    'time': 0,
+    'difficulty': 'easy'
+}
 
-    def save_high_score(self, level, score):
-        # Save the high score for the specified difficulty level
-        pass  # Implement saving logic
+# Sudoku generation function
+def generate_board(difficulty):
+    # Logic to create a valid solved board and remove numbers based on difficulty
+    pass
 
-    def update_timer(self):
-        # Update the timer
-        pass  # Implement timer update logic
+# Validation functions
+def validate_row(board, row, num):
+    return num not in board[row]
 
-    def start_game(self):
-        self.state = 'play'
-        # Start the game loop
+def validate_column(board, col, num):
+    return num not in [board[r][col] for r in range(9)]
 
-    def pause_game(self):
-        self.state = 'pause'
+def validate_box(board, row, col, num):
+    start_row, start_col = (row // 3) * 3, (col // 3) * 3
+    return num not in [board[r][c] for r in range(start_row, start_row + 3) for c in range(start_col, start_col + 3)]
 
-    def resume_game(self):
-        self.state = 'play'
+# Input handlers
+def handle_title_input():
+    pass  # Handle inputs for title screen
 
-    def end_game(self):
-        self.state = 'gameover'
-        # Check for high score
+def handle_play_input():
+    pass  # Handle inputs for play screen
 
-    def display_screen(self):
-        # Display the current game screen
-        if self.state == 'title':
-            print("Welcome to Sudoku!")
-        elif self.state == 'play':
-            print("Playing...")
-        elif self.state == 'pause':
-            print("Game Paused.")
-        elif self.state == 'gameover':
-            print("Game Over!")
-            print(f"Your score: {self.current_score}")
+def handle_pause_input():
+    pass  # Handle inputs for pause screen
 
-# Badges Controls Setup
-class BadgeControls:
-    def __init__(self, game):
-        self.game = game
+# Controls
+# Arrow keys to move cursor
+# A to cycle numbers 1-9
+# B to clear
+# C for hint
+# HOME or B+C to pause
 
-    def handle_input(self, input):
-        if input == 'A':
-            self.game.start_game()
-        elif input == 'B':
-            self.game.pause_game()
-        elif input == 'C':
-            self.game.end_game()
-        elif input == 'UP':
-            pass  # Implement UP behavior
-        elif input == 'DOWN':
-            pass  # Implement DOWN behavior
-        elif input == 'HOME':
-            self.game.state = 'title'  # Return to title screen
+# Drawing functions
+def draw_grid():
+    pass  # Logic to draw Sudoku grid
 
-# Example of running the game
-if __name__ == '__main__':
-    sudoku_game = SudokuGame()
-    controls = BadgeControls(sudoku_game)
-    sudoku_game.display_screen()
+def draw_cells():
+    pass  # Logic to draw Sudoku cells
+
+def draw_sidebar():
+    pass  # Logic to draw sidebar with stats
+
+# GitHub-themed labels
+def draw_labels():
+    # Draw labels like 'Open Issues' for empty cells and 'Merge Conflicts' for mistakes
+    pass
+
+# Persistent high scores
+def save_scores():
+    State.save('scores.json', game_state)
+
+def load_scores():
+    State.load('scores.json')
+
+# Toast messages
+def show_toast(message):
+    pass  # Logic to show toast messages for events
+
+# Main update function
+def update():
+    handle_input()  # Call input handler based on the current screen
+    draw_grid()  # Draw the grid
+    draw_cells()  # Draw the cells
+    draw_sidebar()  # Draw the sidebar with stats
+    
+# Font loading
+FONT_PATH = '/system/assets/fonts/somefont.ttf'
